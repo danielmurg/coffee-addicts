@@ -1,6 +1,8 @@
 """Main module of the coffee application"""
+import os
 import sys
 
+sys.path.append(os.path.realpath(__file__)[:os.path.realpath(__file__).find('src')])
 from tests.test import Tests
 from coffee_addicts import CoffeeAddicts
 

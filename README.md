@@ -1,5 +1,16 @@
 # coffee-addicts
 
+Prerequisites:
+    python >= 3.8
+    pandas = 1.5.2
+Run example:
+    python main.py 3.3 2 https://raw.githubusercontent.com/Agilefreaks/test_oop/master/coffee_shops.csv
+
+Observation: 
+    In the problem description below the coffee shop csv is described to be `Name,Y Coordinate,X Coordinate`,
+    but then the given example (Input and expected_output) would not match. In order to match, the csv file 
+    is actually `Name,X Coordinate,Y Coordinate`. The application was designed to work in order to match the given example, so the csv file should have this structure: `Name,X Coordinate,Y Coordinate`.
+
 ## Overview
 
 You have been hired by a company that builds a app for coffee addicts.  You are 
