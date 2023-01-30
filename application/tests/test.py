@@ -5,7 +5,7 @@ from src.coffee_addicts import CoffeeAddicts
 class Tests:
     """Test class"""
 
-    def test_distance_function(self):
+    def test_computations(self):
         """Function that tests the distance function"""
         coffee_data_good = CoffeeAddicts(
             47.6,
@@ -18,13 +18,7 @@ class Tests:
             "Starbucks SF,10.0793",
         ]
 
-        coffee_data_bad = CoffeeAddicts(47.6, -122.4, "invalid_path.csv")
-        outputs_bad = -1
-
-        assert (
-            coffee_data_good.compute_distances(),
-            coffee_data_bad.compute_distances(),
-        ) == (outputs_good, outputs_bad)
+        assert coffee_data_good.perform_computations() == outputs_good
 
     def test_x_coordinate_validation(self):
         """Function that test the validation of the first argument
@@ -109,7 +103,7 @@ class Tests:
             self.test_x_coordinate_validation()
             self.test_y_coordinate_validation()
             self.test_file_path_validation()
-            self.test_distance_function()
+            self.test_computations()
         except AssertionError:
             return -1
         return 0

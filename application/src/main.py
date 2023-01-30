@@ -1,51 +1,64 @@
 """Main module of the coffee application"""
+import argparse
 import os
 import sys
+from packaging import version
 
-sys.path.append(os.path.realpath(__file__)[:os.path.realpath(__file__).find('src')])
-from tests.test import Tests
+
+sys.path.append(os.path.realpath(__file__)[: os.path.realpath(__file__).find("src")])
 from coffee_addicts import CoffeeAddicts
 
 
-def check_error(error):
-    """Function that prints and checks if error occured during input validation"""
-    if error is not None:
-        print(error)
-        return 1
-    return 0
+def is_valid_file(parser, arg):
+    "Function that validates the file input: Checks if it is .csv"
+    if not arg[-4:].lower() == ".csv":
+        parser.error(f"The file path/url: {arg} must be from a csv file!")
+    else:
+        return arg
 
 
 def main():
     """Main function of the coffee app"""
-    args = sys.argv[1:]
-    user_python_version = sys.version
-    py_version = float(user_python_version[:3])
-    if py_version < 3.8:
+    parser = argparse.ArgumentParser(
+        description="Returns top 3 closest coffee shops from user inputed coordinates"
+    )
+    parser.add_argument(
+        "x_coordinate",
+        metavar="x_coord",
+        type=float,
+        help="A float representing the x coordinate",
+    )
+    parser.add_argument(
+        "y_coordinate",
+        metavar="y_coord",
+        type=float,
+        help="A float representing the y coordinate",
+    )
+    parser.add_argument(
+        "file_path",
+        metavar="file_path",
+        type=lambda x: is_valid_file(parser, x),
+        help="An url or file path of a .CSV file",
+    )
+    args = parser.parse_args()
+    user_python_version = str(sys.version).split(" ", maxsplit=1)[0]
+    if version.parse(user_python_version) < version.parse("3.8"):
         print(
             f"""Python version required for this app is >= 3.8!
         Current users version: {user_python_version}"""
         )
+        sys.exit()
     else:
-        if len(args) != 3:
-            print("Exactly 3 arguments required!")
-        else:
-            tests = Tests()
-            if tests.run_tests() == -1:
-                print("Program does not work properly!")
-            else:
-                coffee_addicts = CoffeeAddicts(args[0], args[1], args[2])
-                errors_list = coffee_addicts.validate_input()
-                total_errors = 0
-                for error in errors_list:
-                    total_errors += check_error(error)
-                if total_errors == 0:
-                    closest_coffee_shops = coffee_addicts.compute_distances()
-                    if closest_coffee_shops == -1:
-                        print(
-                            f"{args[2]} is not a valid url/path or the file is corrupted."
-                        )
-                    else:
-                        print(*closest_coffee_shops, sep="\n")
+        coffee_addicts = CoffeeAddicts(
+            args.x_coordinate, args.y_coordinate, args.file_path
+        )
+        try:
+            closest_coffee_shops = coffee_addicts.perform_computations()
+            print(*closest_coffee_shops, sep="\n")
+            sys.exit()
+        except FileNotFoundError as file_not_found:
+            print(str(file_not_found))
+            sys.exit()
 
 
 if __name__ == "__main__":
