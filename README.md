@@ -3,7 +3,11 @@
 Prerequisites:
     python >= 3.8
     pandas = 1.5.2
-Run example:
+Run instructions:
+    Go to the src folder (e.g ../coffee_addicts/application/src) then type:
+    python main.py -h -> get program description and input format.
+    
+    Sample run example:
     python main.py 3.3 2 https://raw.githubusercontent.com/Agilefreaks/test_oop/master/coffee_shops.csv
 
 Observation: 
